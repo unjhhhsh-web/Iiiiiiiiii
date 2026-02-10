@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بيانات Apple ID - إدارة الحساب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f141e;
+            --input-bg: #1a222e;
+            --accent-red: #d92d20;
+            --accent-blue: #2d5cfd;
+            --accent-green: #10b981;
+            --text-white: #ffffff;
+            --text-gray: #9ca3af;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding-top: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--accent-red);
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* حاوية الأزرار الرئيسية */
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .btn-main {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: white;
+        }
+
+        #edit-btn { background-color: var(--accent-blue); }
+        #save-btn { background-color: var(--accent-green); display: none; } /* مخفي افتراضياً */
+
+        .field-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-white);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .input-container {
+            display: flex;
+            background-color: var(--input-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2d3748;
+            transition: 0.3s;
+        }
+
+        .input-container.editing {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 8px rgba(45, 92, 253, 0.3);
+        }
+
+        .copy-btn {
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            width: 55px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .field-value {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-white);
+            font-size: 16px;
+            outline: none;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .field-value:not([readonly]) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        #toast {
+            visibility: hidden;
+            background-color: #10b981;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 8px;
+            z-index: 100;
+        }
+
+        #toast.show { visibility: visible; animation: fade 2s; }
+
+        @keyframes fade {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Apple ID</h1>
+    </div>
+
+    <div class="action-bar">
+        <button id="edit-btn" class="btn-main" onclick="enableEditing()">
+            <span>تعديل البيانات</span>
+        </button>
+        <button id="save-btn" class="btn-main" onclick="saveChanges()">
+            <span>حفظ التعديلات</span>
+        </button>
+    </div>
+
+    <div class="field-group">
+        <label class="field-label">بريد إلكتروني / Email</label>
+        <div class="input-container">
+            <button class="copy-btn" onclick="copyText('email')">📋</button>
+            <input type="text" id="email" class="field-value" value="stefanoalfarouqmy4@icloud.com" readonly>
+        </div>
+    </div>
+
+    <div class="field-group">
+        <label class="field-label">كلمة المرور / Password</label>
+        <div class="input-container">
+            <button class="copy-btn" onclick="copyText('pass')">📋</button>
+            <input type="text" id="pass" class="field-value" value="باسورد" readonly>
+        </div>
+    </div>
+
+    <div class="field-group">
+        <label class="field-label">الاسم الأول / First Name</label>
+        <div class="input-container">
+            <button class="copy-btn" onclick="copyText('fname')">📋</button>
+            <input type="text" id="fname" class="field-value" value="Stefano" readonly>
+        </div>
+    </div>
+
+    <div class="field-group">
+        <label class="field-label">اسم العائلة / Last Name</label>
+        <div class="input-container">
+            <button class="copy-btn" onclick="copyText('lname')">📋</button>
+            <input type="text" id="lname" class="field-value" value="Al-Farouq" readonly>
+        </div>
+    </div>
+
+    <div class="field-group">
+        <label class="field-label">تاريخ الميلاد / Date of Birth</label>
+        <div class="input-container">
+            <button class="copy-btn" onclick="copyText('dob')">📋</button>
+            <input type="text" id="dob" class="field-value" value="18/12/1981" readonly>
+        </div>
+    </div>
+
+    <div class="field-group">
+        <label class="field-label">رقم الهاتف / Phone Number</label>
+        <div class="input-container">
+            <button class="copy-btn" onclick="copyText('phone')">📋</button>
+            <input type="text" id="phone" class="field-value" value="07891705329" readonly>
+        </div>
+    </div>
+</div>
+
+<div id="toast">تم الإجراء بنجاح!</div>
+
+<script>
+    const inputs = document.querySelectorAll('.field-value');
+    const containers = document.querySelectorAll('.input-container');
+    const editBtn = document.getElementById('edit-btn');
+    const saveBtn = document.getElementById('save-btn');
+
+    // وظيفة التعديل
+    function enableEditing() {
+        inputs.forEach(input => input.removeAttribute('readonly'));
+        containers.forEach(container => container.classList.add('editing'));
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'flex';
+        showToast("وضع التعديل مفعل");
+    }
+
+    // وظيفة الحفظ
+    function saveChanges() {
+        inputs.forEach(input => input.setAttribute('readonly', true));
+        containers.forEach(container => container.classList.remove('editing'));
+        saveBtn.style.display = 'none';
+        editBtn.style.display = 'flex';
+        showToast("تم حفظ البيانات بنجاح!");
+        
+        // هنا يمكنك إضافة كود لإرسال البيانات لقاعدة بيانات إذا أردت
+        console.log("البيانات الجديدة المحفوظة:", {
+            email: document.getElementById('email').value,
+            pass: document.getElementById('pass').value
+        });
+    }
+
+    // وظيفة النسخ الأصلية
+    function copyText(id) {
+        var copyText = document.getElementById(id);
+        copyText.select();
+        navigator.clipboard.writeText(copyText.value);
+        showToast("تم النسخ بنجاح!");
+    }
+
+    function showToast(msg) {
+        var toast = document.getElementById("toast");
+        toast.innerText = msg;
+        toast.className = "show";
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2000);
+    }
+</script>
+
+</body>
+</html>
