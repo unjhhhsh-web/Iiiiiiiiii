@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بيانات Apple ID - إدارة الحساب</title>
+    <title>بيانات Apple ID</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f141e;
-            --input-bg: #1a222e;
-            --accent-red: #d92d20;
-            --accent-blue: #2d5cfd;
-            --accent-green: #10b981;
+            --bg-color: #0f141e; /* لون الخلفية الغامق جداً */
+            --input-bg: #1a222e; /* لون الحقول */
+            --accent-red: #d92d20; /* لون زر النسخ وشعار أبل */
             --text-white: #ffffff;
             --text-gray: #9ca3af;
         }
@@ -34,7 +32,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
@@ -46,34 +44,13 @@
             gap: 10px;
         }
 
-        /* حاوية الأزرار الرئيسية */
-        .action-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
+        .header h1 img {
+            width: 30px;
+            filter: invert(19%) sepia(88%) saturate(5436%) hue-rotate(354deg) brightness(92%) contrast(98%);
         }
-
-        .btn-main {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: white;
-        }
-
-        #edit-btn { background-color: var(--accent-blue); }
-        #save-btn { background-color: var(--accent-green); display: none; } /* مخفي افتراضياً */
 
         .field-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: right;
         }
 
@@ -82,7 +59,7 @@
             font-size: 14px;
             color: var(--text-white);
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .input-container {
@@ -91,12 +68,6 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid #2d3748;
-            transition: 0.3s;
-        }
-
-        .input-container.editing {
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 8px rgba(45, 92, 253, 0.3);
         }
 
         .copy-btn {
@@ -108,6 +79,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: 0.2s;
+        }
+
+        .copy-btn:active {
+            opacity: 0.8;
         }
 
         .field-value {
@@ -118,14 +94,11 @@
             color: var(--text-white);
             font-size: 16px;
             outline: none;
-            text-align: left;
+            text-align: left; /* ليبقى النص الإنجليزي من اليسار */
             font-family: 'Courier New', Courier, monospace;
         }
 
-        .field-value:not([readonly]) {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
+        /* رسالة التنبيه */
         #toast {
             visibility: hidden;
             background-color: #10b981;
@@ -140,7 +113,10 @@
             z-index: 100;
         }
 
-        #toast.show { visibility: visible; animation: fade 2s; }
+        #toast.show {
+            visibility: visible;
+            animation: fade 2s;
+        }
 
         @keyframes fade {
             0% { opacity: 0; }
@@ -154,22 +130,18 @@
 
 <div class="container">
     <div class="header">
-        <h1>Apple ID</h1>
-    </div>
-
-    <div class="action-bar">
-        <button id="edit-btn" class="btn-main" onclick="enableEditing()">
-            <span>تعديل البيانات</span>
-        </button>
-        <button id="save-btn" class="btn-main" onclick="saveChanges()">
-            <span>حفظ التعديلات</span>
-        </button>
+        <h1>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
+            Apple ID
+        </h1>
     </div>
 
     <div class="field-group">
         <label class="field-label">بريد إلكتروني / Email</label>
         <div class="input-container">
-            <button class="copy-btn" onclick="copyText('email')">📋</button>
+            <button class="copy-btn" onclick="copyText('email')">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
             <input type="text" id="email" class="field-value" value="stefanoalfarouqmy4@icloud.com" readonly>
         </div>
     </div>
@@ -177,15 +149,19 @@
     <div class="field-group">
         <label class="field-label">كلمة المرور / Password</label>
         <div class="input-container">
-            <button class="copy-btn" onclick="copyText('pass')">📋</button>
-            <input type="text" id="pass" class="field-value" value="باسورد" readonly>
+            <button class="copy-btn" onclick="copyText('pass')">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+            <input type="text" id="pass" class="field-value" value="L@?z44I#qvZc@" readonly>
         </div>
     </div>
 
     <div class="field-group">
         <label class="field-label">الاسم الأول / First Name</label>
         <div class="input-container">
-            <button class="copy-btn" onclick="copyText('fname')">📋</button>
+            <button class="copy-btn" onclick="copyText('fname')">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
             <input type="text" id="fname" class="field-value" value="Stefano" readonly>
         </div>
     </div>
@@ -193,7 +169,9 @@
     <div class="field-group">
         <label class="field-label">اسم العائلة / Last Name</label>
         <div class="input-container">
-            <button class="copy-btn" onclick="copyText('lname')">📋</button>
+            <button class="copy-btn" onclick="copyText('lname')">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
             <input type="text" id="lname" class="field-value" value="Al-Farouq" readonly>
         </div>
     </div>
@@ -201,63 +179,25 @@
     <div class="field-group">
         <label class="field-label">تاريخ الميلاد / Date of Birth</label>
         <div class="input-container">
-            <button class="copy-btn" onclick="copyText('dob')">📋</button>
+            <button class="copy-btn" onclick="copyText('dob')">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
             <input type="text" id="dob" class="field-value" value="18/12/1981" readonly>
         </div>
     </div>
 
-    <div class="field-group">
-        <label class="field-label">رقم الهاتف / Phone Number</label>
-        <div class="input-container">
-            <button class="copy-btn" onclick="copyText('phone')">📋</button>
-            <input type="text" id="phone" class="field-value" value="07891705329" readonly>
-        </div>
-    </div>
 </div>
 
-<div id="toast">تم الإجراء بنجاح!</div>
+<div id="toast">تم النسخ بنجاح!</div>
 
 <script>
-    const inputs = document.querySelectorAll('.field-value');
-    const containers = document.querySelectorAll('.input-container');
-    const editBtn = document.getElementById('edit-btn');
-    const saveBtn = document.getElementById('save-btn');
-
-    // وظيفة التعديل
-    function enableEditing() {
-        inputs.forEach(input => input.removeAttribute('readonly'));
-        containers.forEach(container => container.classList.add('editing'));
-        editBtn.style.display = 'none';
-        saveBtn.style.display = 'flex';
-        showToast("وضع التعديل مفعل");
-    }
-
-    // وظيفة الحفظ
-    function saveChanges() {
-        inputs.forEach(input => input.setAttribute('readonly', true));
-        containers.forEach(container => container.classList.remove('editing'));
-        saveBtn.style.display = 'none';
-        editBtn.style.display = 'flex';
-        showToast("تم حفظ البيانات بنجاح!");
-        
-        // هنا يمكنك إضافة كود لإرسال البيانات لقاعدة بيانات إذا أردت
-        console.log("البيانات الجديدة المحفوظة:", {
-            email: document.getElementById('email').value,
-            pass: document.getElementById('pass').value
-        });
-    }
-
-    // وظيفة النسخ الأصلية
     function copyText(id) {
         var copyText = document.getElementById(id);
         copyText.select();
+        copyText.setSelectionRange(0, 99999);
         navigator.clipboard.writeText(copyText.value);
-        showToast("تم النسخ بنجاح!");
-    }
-
-    function showToast(msg) {
+        
         var toast = document.getElementById("toast");
-        toast.innerText = msg;
         toast.className = "show";
         setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2000);
     }
