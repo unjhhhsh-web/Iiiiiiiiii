@@ -3,205 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بيانات Apple ID</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <title>مولد QR مخصص</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root {
-            --bg-color: #0f141e; /* لون الخلفية الغامق جداً */
-            --input-bg: #1a222e; /* لون الحقول */
-            --accent-red: #d92d20; /* لون زر النسخ وشعار أبل */
-            --text-white: #ffffff;
-            --text-gray: #9ca3af;
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-white);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-            padding-top: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            color: var(--accent-red);
-            font-size: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .header h1 img {
-            width: 30px;
-            filter: invert(19%) sepia(88%) saturate(5436%) hue-rotate(354deg) brightness(92%) contrast(98%);
-        }
-
-        .field-group {
-            margin-bottom: 25px;
-            text-align: right;
-        }
-
-        .field-label {
-            display: block;
-            font-size: 14px;
-            color: var(--text-white);
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .input-container {
-            display: flex;
-            background-color: var(--input-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #2d3748;
-        }
-
-        .copy-btn {
-            background-color: var(--accent-red);
-            color: white;
-            border: none;
-            width: 55px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-
-        .copy-btn:active {
-            opacity: 0.8;
-        }
-
-        .field-value {
-            flex: 1;
-            padding: 15px;
-            background: transparent;
-            border: none;
-            color: var(--text-white);
-            font-size: 16px;
-            outline: none;
-            text-align: left; /* ليبقى النص الإنجليزي من اليسار */
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        /* رسالة التنبيه */
-        #toast {
-            visibility: hidden;
-            background-color: #10b981;
-            color: white;
-            text-align: center;
-            padding: 12px;
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 8px;
-            z-index: 100;
-        }
-
-        #toast.show {
-            visibility: visible;
-            animation: fade 2s;
-        }
-
-        @keyframes fade {
-            0% { opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 100%; max-width: 400px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background: #dc2626; }
+        #qrcode { margin-top: 25px; background: white; padding: 15px; border-radius: 10px; display: none; }
+        h2 { color: #f8fafc; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
-            Apple ID
-        </h1>
-    </div>
-
-    <div class="field-group">
-        <label class="field-label">بريد إلكتروني / Email</label>
-        <div class="input-container">
-            <button class="copy-btn" onclick="copyText('email')">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </button>
-            <input type="text" id="email" class="field-value" value="stefanoalfarouqmy4@icloud.com" readonly>
-        </div>
-    </div>
-
-    <div class="field-group">
-        <label class="field-label">كلمة المرور / Password</label>
-        <div class="input-container">
-            <button class="copy-btn" onclick="copyText('pass')">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </button>
-            <input type="text" id="pass" class="field-value" value="L@?z44I#qvZc@" readonly>
-        </div>
-    </div>
-
-    <div class="field-group">
-        <label class="field-label">الاسم الأول / First Name</label>
-        <div class="input-container">
-            <button class="copy-btn" onclick="copyText('fname')">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </button>
-            <input type="text" id="fname" class="field-value" value="Stefano" readonly>
-        </div>
-    </div>
-
-    <div class="field-group">
-        <label class="field-label">اسم العائلة / Last Name</label>
-        <div class="input-container">
-            <button class="copy-btn" onclick="copyText('lname')">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </button>
-            <input type="text" id="lname" class="field-value" value="Al-Farouq" readonly>
-        </div>
-    </div>
-
-    <div class="field-group">
-        <label class="field-label">تاريخ الميلاد / Date of Birth</label>
-        <div class="input-container">
-            <button class="copy-btn" onclick="copyText('dob')">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            </button>
-            <input type="text" id="dob" class="field-value" value="18/12/1981" readonly>
-        </div>
-    </div>
-
-</div>
-
-<div id="toast">تم النسخ بنجاح!</div>
-
-<script>
-    function copyText(id) {
-        var copyText = document.getElementById(id);
-        copyText.select();
-        copyText.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(copyText.value);
+    <div class="card">
+        <h2>أدخل معلوماتك</h2>
+        <input type="text" id="fname" placeholder="الاسم الأول">
+        <input type="text" id="lname" placeholder="اسم العائلة">
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+        <input type="text" id="pass" placeholder="كلمة المرور">
         
-        var toast = document.getElementById("toast");
-        toast.className = "show";
-        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2000);
-    }
-</script>
+        <button onclick="generateQR()">توليد الباركود الآن</button>
+        
+        <center><div id="qrcode"></div></center>
+    </div>
 
+    <script>
+        function generateQR() {
+            const fn = document.getElementById('fname').value;
+            const ln = document.getElementById('lname').value;
+            const em = document.getElementById('email').value;
+            const ps = document.getElementById('pass').value;
+
+            if(!fn || !em) { alert("يرجى إدخال الاسم والبريد على الأقل"); return; }
+
+            // تنظيف المكان القديم للباركود
+            document.getElementById("qrcode").innerHTML = "";
+            document.getElementById("qrcode").style.display = "block";
+
+            // صياغة النص الذي سيظهر داخل الباركود
+            const fullText = `الاسم: ${fn} ${ln}\nالإيميل: ${em}\nالباسورد: ${ps}`;
+
+            // توليد الباركود
+            new QRCode(document.getElementById("qrcode"), {
+                text: fullText,
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    </script>
 </body>
 </html>
